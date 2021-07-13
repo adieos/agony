@@ -1,7 +1,7 @@
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 password = ""
 amogus = True
-word = input(str("Enter your password: "))
+word = input("Enter your password: ")
 
 while amogus:
     try:
