@@ -1,9 +1,26 @@
 import pyautogui
 import time
+amogus = True
 string =  input("What would you like to spam? ")
-sleeptime = int(input("How long do I need to wait? "))
-amount = int(input("How many times do you want to spam? "))
+
+while amogus:
+   try:
+      sleeptime = int(input("How long do I need to wait? "))
+      break
+   except ValueError:
+      print("Please enter a valid number!")
+
+while amogus:
+   try:
+      amount = int(input("How many times do you want to spam? "))
+      break
+   except ValueError:
+      print("Please enter a valid number!")
+   
+
 print("Countdown starting...")
+
+
 for i in range(sleeptime, 0, -1):
    print(i)
    time.sleep(1)
