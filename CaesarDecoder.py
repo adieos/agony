@@ -1,7 +1,9 @@
+# wow guys i made a decoder 
+
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 password = ""
 amogus = True
-word = input("Enter your password: ")
+word = input("Enter your encoded password: ")
 
 while amogus:
     try:
@@ -12,8 +14,8 @@ while amogus:
 
 for char in word:
     pos = alphabet.find(char)
-    newpos = (pos+key) % 26
+    newpos = (pos-key) % 26
     newchar = alphabet[newpos]
     password += newchar
 
-print("Your new password is "+password)
+print("Your decoded password is "+password)
