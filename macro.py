@@ -17,6 +17,12 @@ while amogus:
    except ValueError:
       print("Please enter a valid number!")
    
+while amogus:
+   try:
+      interval = int(input("How long does the interval will last? "))
+      break
+   except ValueError:
+      print("Please print a valid number!")
 
 print("Countdown starting...")
 
@@ -29,5 +35,7 @@ print("Spam initiated")
 for i in range(0,amount):
    pyautogui.write(string)
    pyautogui.press("Enter")
+   time.sleep(interval)
 print("Spam ended")
+
     
