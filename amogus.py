@@ -47,7 +47,7 @@ async def clear(ctx, amt=None):
 async def cc(ctx, key=None, text=None):
     password = ""
     try:
-        key = key(int)
+        key = int(key)
         for i in text:
             pos = ord(i)
             pos += key
@@ -59,12 +59,17 @@ async def cc(ctx, key=None, text=None):
                 else:
                     break
             password += chr(pos)
+        await ctx.send(f"Your new password is `{password}`")
+    except TypeError:
         if text == None:
             await ctx.send("Nothing to encrypt!")
         else:
-            await ctx.send(f"Your new password is `{password}")
-    except TypeError:
-        await ctx.send("Hey! Input a valid number!")
+            await ctx.send("Unknown error occured.")
+    except ValueError:
+        await ctx.send("Invalid number!")
+# Flaws:
+# 1. Unable to encrypt non-alphabetical characters
+# 2. Output is always lowercase, despite input is uppercase
 
 
 bot.run(token)
