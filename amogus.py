@@ -41,18 +41,6 @@ async def ohhiorun(ctx, box=None):
     except ValueError:
         await ctx.send("Invalid number!")
 
-@bot.command()
-async def add(ctx, *num):
-    try:
-        sum = 0
-        ctx.send(type(sum))
-        for i in num:
-            i = int(i)
-            sum += i
-        await ctx.send(sum)
-    except ValueError or TypeError:
-        await ctx.send("Invalid number detected!")
-
 @bot.command(aliases=["purge"])
 async def clear(ctx, amt=None):
     a = 1
@@ -99,16 +87,34 @@ async def cc(ctx, key=None, text=None):
 
 @bot.command()
 async def embed(ctx):
-    embedharharhar = discord.Embed(
-        title="Embed demo",
-        url="https://www.youtube.com/watch?v=1rjCuPQI298",
-        description="Click this to go to Mehdi Sadhaghar's video"
+    ebd = discord.Embed(
+        title="Circuit, Series, and Parallel",
+        url="https://www.youtube.com/watch?v=AMXWm_bnsTE",
+        description="ElectroBOOM101 - Eps. 005",
+        color = 0x9c5513
     )
-    embedharharhar.set_author(
-        name="Amogus",
+    ebd.set_author(
+        name=ctx.author.display_name,
         url="https://www.youtube.com/watch?v=5DlROhT8NgU",
-        icon_url="https://imgur.com/a/QixbJ4h"
+        icon_url=ctx.author.avatar_url
     )
-    await ctx.send(embed=embedharharhar)
+    ebd.set_thumbnail(url="https://cdn.discordapp.com/attachments/746991157766127678/869185583430389810/mehdi.jpg") # it keeps buffering PAIN
+    ebd.add_field(
+        name="Circuit",
+        value="Mehdi Sadaghdar explains what a circuit is",
+        inline=False
+    )
+    ebd.add_field(
+        name="Series",
+        value="Mehdi explains how a series circuit behaves",
+        inline=True
+    )
+    ebd.add_field(
+        name="Parallel",
+        value="Mehdi explains how a parallel circuit behaves",
+        inline=True
+    )
+    ebd.set_footer(text="This embed is not affiliated with ElectroBOOM whatsoever hhh")
+    await ctx.send(embed=ebd)
 
 bot.run(atoken)
