@@ -1,10 +1,5 @@
 # Personal test files
-randomizer.py
-file-detection.py
-modulee.py
-requesting.py
-testOne.py
-suspisus.py
+personal/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

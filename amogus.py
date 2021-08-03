@@ -1,10 +1,10 @@
-from typing import Type
 import discord
 from discord.ext import commands
-from suspisus import atoken
+from personal.suspisus import atoken
 from discord.utils import find
+import os
 
-bot = commands.Bot(command_prefix="sus ")
+bot = commands.Bot(command_prefix="sus ",description="Amogus")
 
 @bot.event
 async def on_ready():
@@ -98,7 +98,7 @@ async def embed(ctx):
         url="https://www.youtube.com/watch?v=5DlROhT8NgU",
         icon_url=ctx.author.avatar_url
     )
-    ebd.set_thumbnail(url="https://cdn.discordapp.com/attachments/746991157766127678/869185583430389810/mehdi.jpg") # it keeps buffering PAIN
+    ebd.set_thumbnail(url="https://cdn.discordapp.com/attachments/746991157766127678/869185583430389810/mehdi.jpg")
     ebd.add_field(
         name="Circuit",
         value="Mehdi Sadaghdar explains what a circuit is",
@@ -116,5 +116,26 @@ async def embed(ctx):
     )
     ebd.set_footer(text="This embed is not affiliated with ElectroBOOM whatsoever hhh")
     await ctx.send(embed=ebd)
+
+# Load and unload extensions hhhh
+@bot.command()
+async def load(ctx, ext):
+    bot.load_extension(f"cogs.{ext}")
+    await ctx.send(f"Extension `{ext}` has been loaded.")
+
+@bot.command()
+async def unload(ctx, ext):
+    bot.unload_extension(f"cogs.{ext}")
+    await ctx.send(f"Extension {ext} has been unloaded.")
+
+@bot.command()
+async def reload(ctx, ext):
+     bot.unload_extension(f"cogs.{ext}")
+     bot.load_extension(f"cogs.{ext}")
+     await ctx.send(f"Extension {ext} has been reloaded.")
+
+for filename in os.listdir("./cogs"):
+    if filename.endswith(".py"):
+         bot.load_extension(f"cogs.{filename[:-3]}")
 
 bot.run(atoken)
