@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands.errors import ExtensionNotFound, ExtensionNotLoaded, UserNotFound
 from personal.suspisus import atoken
 from discord.utils import find
 import os
@@ -58,32 +59,31 @@ async def clear(ctx, amt=None):
             break
 
 @bot.command()
-async def cc(ctx, key=None, text=None):
-    password = ""
-    try:
-        key = int(key)
-        for i in text:
-            pos = ord(i)
-            pos += key
-            while True:
-                if pos >= 123:
-                    pos -= 26
-                elif pos <= 96:
-                    pos += 26
-                else:
-                    break
-            password += chr(pos)
-        await ctx.send(f"Your new password is `{password}`")
-    except TypeError:
-        if text == None:
-            await ctx.send("Nothing to encrypt!")
-        else:
-            await ctx.send("Unknown error occured.")
-    except ValueError:
-        await ctx.send("Invalid number!")
-# Flaws:
-# 1. Unable to encrypt non-alphabetical characters
-# 2. Output is always lowercase, despite input is uppercase
+async def grabid(ctx, user: discord.User):
+    await ctx.send(user.id)
+
+@bot.command()
+async def sp(ctx, user: discord.User = None, amt=None):
+    if user is None:
+        await ctx.send("No user detected!")
+    elif amt is None:
+        await ctx.send("Ping amount required!")
+    else:
+        try:
+            amt = int(amt)
+            if amt >= 10:
+                await ctx.send("Too many pings, evildoer!")
+                return
+            elif amt < 0:
+                await ctx.send("Hey dumbo, you cant ping someone negative number times")
+                return
+            for i in range(amt):
+                await ctx.send(f"<@{user.id}>")
+        except ValueError:
+            await ctx.send("Input a valid number!")
+        except:
+            await ctx.send("User not found!")
+
 
 @bot.command()
 async def embed(ctx):
@@ -119,20 +119,41 @@ async def embed(ctx):
 
 # Load and unload extensions hhhh
 @bot.command()
-async def load(ctx, ext):
-    bot.load_extension(f"cogs.{ext}")
-    await ctx.send(f"Extension `{ext}` has been loaded.")
+async def load(ctx, *ext):
+    if len(ext) == 0:
+        await ctx.send("No extension loaded!")
+    else:
+        for i in ext:
+            try:
+                bot.load_extension(f"cogs.{i}")
+                await ctx.send(f"Extension `{i}` has been loaded.")
+            except ExtensionNotFound:
+                await ctx.send(f"Extension `{i}` not found!")
 
 @bot.command()
-async def unload(ctx, ext):
-    bot.unload_extension(f"cogs.{ext}")
-    await ctx.send(f"Extension {ext} has been unloaded.")
+async def unload(ctx, *ext):
+    if len(ext) == 0:
+        await ctx.send("No extension unloaded!")
+    else:
+        for i in ext:
+            try:
+                bot.unload_extension(f"cogs.{i}")
+                await ctx.send(f"Extension `{i}` has been unloaded.")
+            except ExtensionNotLoaded:
+                await ctx.send(f"Extension `{i}` not found!")
 
 @bot.command()
-async def reload(ctx, ext):
-     bot.unload_extension(f"cogs.{ext}")
-     bot.load_extension(f"cogs.{ext}")
-     await ctx.send(f"Extension {ext} has been reloaded.")
+async def reload(ctx, *ext):
+    if len(ext) == 0:
+        await ctx.send("No extension reloaded!")
+    else:
+        for i in ext:
+            try:
+                bot.unload_extension(f"cogs.{i}")
+                bot.load_extension(f"cogs.{i}")
+                await ctx.send(f"Extension {i} has been reloaded.")
+            except ExtensionNotLoaded:
+                await ctx.send(f"Extension `{i}` not found!")
 
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
