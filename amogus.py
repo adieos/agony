@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands.errors import ExtensionNotFound, ExtensionNotLoaded, UserNotFound
+from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded, UserNotFound
 from personal.suspisus import atoken
 from discord.utils import find
 import os
@@ -21,6 +21,7 @@ async def on_guild_join(guild):
 @bot.command()
 async def picious(ctx):
     await ctx.send("amogus")
+    await ctx.send(ctx.author.id)
 
 @bot.command()
 async def ping(ctx):
@@ -59,9 +60,17 @@ async def clear(ctx, amt=None):
             break
 
 @bot.command()
-async def grabid(ctx, user: discord.User):
+async def grabid(ctx, user: discord.User = None):
+    if user is None:
+        ebd = discord.Embed(
+            title = "grabid",
+            description = "Outputs the ID of the person,\nSyntax:\n`sus grabid <User>`"
+        )
+        await ctx.send(embed=ebd)
+        return
     await ctx.send(user.id)
 
+#this thing still flawed shhh
 @bot.command()
 async def sp(ctx, user: discord.User = None, amt=None):
     if user is None:
@@ -82,8 +91,7 @@ async def sp(ctx, user: discord.User = None, amt=None):
         except ValueError:
             await ctx.send("Input a valid number!")
         except:
-            await ctx.send("User not found!")
-
+            await ctx.send("Invalid user!")
 
 @bot.command()
 async def embed(ctx):
@@ -120,6 +128,9 @@ async def embed(ctx):
 # Load and unload extensions hhhh
 @bot.command()
 async def load(ctx, *ext):
+    if ctx.author.id != 515777528657608705:
+        await ctx.send("You are not allowed to do that!")
+        return
     if len(ext) == 0:
         await ctx.send("No extension loaded!")
     else:
@@ -129,9 +140,14 @@ async def load(ctx, *ext):
                 await ctx.send(f"Extension `{i}` has been loaded.")
             except ExtensionNotFound:
                 await ctx.send(f"Extension `{i}` not found!")
+            except ExtensionAlreadyLoaded:
+                await ctx.send(f"Extension `{i}` is already loaded!")
 
 @bot.command()
 async def unload(ctx, *ext):
+    if ctx.author.id != 515777528657608705:
+        await ctx.send("You are not allowed to do that!")
+        return
     if len(ext) == 0:
         await ctx.send("No extension unloaded!")
     else:
@@ -144,6 +160,9 @@ async def unload(ctx, *ext):
 
 @bot.command()
 async def reload(ctx, *ext):
+    if ctx.author.id != 515777528657608705:
+        await ctx.send("You are not allowed to do that!")
+        return
     if len(ext) == 0:
         await ctx.send("No extension reloaded!")
     else:

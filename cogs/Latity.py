@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class Latity(commands.Cog):
+class Mehdi(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -52,4 +52,4 @@ class Latity(commands.Cog):
         await ctx.send(embed=ebd)
         
 def setup(client):
-    client.add_cog(Latity(client))
+    client.add_cog(Mehdi(client))
