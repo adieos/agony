@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded, UserNotFound
+from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded
 from personal.suspisus import atoken
 from discord.utils import find
 import os
@@ -92,38 +92,6 @@ async def sp(ctx, user: discord.User = None, amt=None):
             await ctx.send("Input a valid number!")
         except:
             await ctx.send("Invalid user!")
-
-@bot.command()
-async def embed(ctx):
-    ebd = discord.Embed(
-        title="Circuit, Series, and Parallel",
-        url="https://www.youtube.com/watch?v=AMXWm_bnsTE",
-        description="ElectroBOOM101 - Eps. 005",
-        color = 0x9c5513
-    )
-    ebd.set_author(
-        name=ctx.author.display_name,
-        url="https://www.youtube.com/watch?v=5DlROhT8NgU",
-        icon_url=ctx.author.avatar_url
-    )
-    ebd.set_thumbnail(url="https://cdn.discordapp.com/attachments/746991157766127678/869185583430389810/mehdi.jpg")
-    ebd.add_field(
-        name="Circuit",
-        value="Mehdi Sadaghdar explains what a circuit is",
-        inline=False
-    )
-    ebd.add_field(
-        name="Series",
-        value="Mehdi explains how a series circuit behaves",
-        inline=True
-    )
-    ebd.add_field(
-        name="Parallel",
-        value="Mehdi explains how a parallel circuit behaves",
-        inline=True
-    )
-    ebd.set_footer(text="This embed is not affiliated with ElectroBOOM whatsoever hhh")
-    await ctx.send(embed=ebd)
 
 # Load and unload extensions hhhh
 @bot.command()

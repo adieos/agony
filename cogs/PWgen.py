@@ -6,7 +6,7 @@ class PWgen(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(aliases=["caesar","Caesar"])
     async def cc(self, ctx, key=None, text=None):
         password = ""
         try:
