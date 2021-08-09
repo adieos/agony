@@ -30,6 +30,7 @@ class PWgen(commands.Cog):
                 await ctx.send("Unknown error occured.")
         except ValueError:
             await ctx.send("Invalid number!")
+
 # Flaws:
 # 1. Unable to encrypt non-alphabetical characters
 # 2. Output is always lowercase, despite input is uppercase

@@ -20,13 +20,14 @@ async def on_guild_join(guild):
 
 @bot.command()
 async def picious(ctx):
-    await ctx.send("amogus")
-    await ctx.send(ctx.author.id)
+    channel = bot.get_channel(873407182564098048) 
+    await channel.send("🙏 :pray:")
 
 @bot.command()
 async def ping(ctx):
     await ctx.send(f"Pong! ({round(bot.latency * 1000)}ms)")
 
+# Misc
 @bot.command()
 async def ohhiorun(ctx, box=None):
     try:
@@ -45,53 +46,14 @@ async def ohhiorun(ctx, box=None):
 
 @bot.command(aliases=["purge"])
 async def clear(ctx, amt=None):
-    a = 1
-    while a == 1:
-        try:
-            if amt == None:
-                await ctx.send("Oi evildoer, I need a number")
-                break
-            amt = int(amt) + 1
-            await ctx.channel.purge(limit=amt)
-            await ctx.send(f"{amt-1} messages got deleted by {ctx.author.mention}")
-        except:
-            await ctx.send("Something hsa gone wrong hhh")
-        finally:
-            break
-
-@bot.command()
-async def grabid(ctx, user: discord.User = None):
-    if user is None:
-        ebd = discord.Embed(
-            title = "grabid",
-            description = "Outputs the ID of the person,\nSyntax:\n`sus grabid <User>`"
-        )
-        await ctx.send(embed=ebd)
-        return
-    await ctx.send(user.id)
-
-#this thing still flawed shhh
-@bot.command()
-async def sp(ctx, user: discord.User = None, amt=None):
-    if user is None:
-        await ctx.send("No user detected!")
-    elif amt is None:
-        await ctx.send("Ping amount required!")
-    else:
-        try:
-            amt = int(amt)
-            if amt >= 10:
-                await ctx.send("Too many pings, evildoer!")
-                return
-            elif amt < 0:
-                await ctx.send("Hey dumbo, you cant ping someone negative number times")
-                return
-            for i in range(amt):
-                await ctx.send(f"<@{user.id}>")
-        except ValueError:
-            await ctx.send("Input a valid number!")
-        except:
-            await ctx.send("Invalid user!")
+    try:
+        if amt == None:
+            await ctx.send("Oi evildoer, I need a number")
+            return
+        amt = int(amt) + 1
+        await ctx.channel.purge(limit=amt)
+    except:
+        await ctx.send("Something hsa gone wrong hhh")
 
 # Load and unload extensions hhhh
 @bot.command()
