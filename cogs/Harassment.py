@@ -94,6 +94,10 @@ class Harassment(commands.Cog):
                 value = "`tmc`",
                 inline = False
             )
+            ebd.set_footer(
+                text = "Made by adios#1444",
+                icon_url = "https://cdn.discordapp.com/attachments/733197081681985653/872832326239911986/hhh.gif"
+            )
             await ctx.send(embed=ebd)
             return
         for i in color:
@@ -108,6 +112,12 @@ class Harassment(commands.Cog):
                 else:
                     await ctx.author.remove_roles(crole)
                     await ctx.send(f"Removed color {i}.")
+    
+    @commands.command()
+    async def harassdoc(self,ctx):
+        user = await self.client.fetch_user(458553882029850645)
+        for i in range(5):
+            await user.send("Doc youstink")
 
 def setup(client):
     client.add_cog(Harassment(client))
