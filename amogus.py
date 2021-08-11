@@ -69,6 +69,8 @@ async def load(ctx, *ext):
         await ctx.send("No extension loaded!")
     else:
         for i in ext:
+            i = i.lower()
+            i = i.capitalize()
             try:
                 bot.load_extension(f"cogs.{i}")
                 await ctx.send(f"Extension `{i}` has been loaded.")
@@ -86,6 +88,8 @@ async def unload(ctx, *ext):
         await ctx.send("No extension unloaded!")
     else:
         for i in ext:
+            i = i.lower()
+            i = i.capitalize()
             try:
                 bot.unload_extension(f"cogs.{i}")
                 await ctx.send(f"Extension `{i}` has been unloaded.")
@@ -101,6 +105,8 @@ async def reload(ctx, *ext):
         await ctx.send("No extension reloaded!")
     else:
         for i in ext:
+            i = i.lower()
+            i = i.capitalize()
             try:
                 bot.unload_extension(f"cogs.{i}")
                 bot.load_extension(f"cogs.{i}")
