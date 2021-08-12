@@ -6,6 +6,12 @@ class Harassment(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+   # @commands.Cog.listener()
+   # async def on_message(self, ctx):
+    #    if ctx.author.id == 515777528657608705:
+    #        await ctx.delete()
+    #        await ctx.channel.send("https://cdn.discordapp.com/emojis/865717171539542016.gif?v=1")
+
     @commands.command()
     async def dm(self, ctx, user: discord.User = None, *, msg):
         if user is None:

@@ -1,4 +1,5 @@
 import discord
+from discord import channel
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
@@ -42,6 +43,25 @@ class Moderating(commands.Cog):
             await ctx.send("You cant do that!")
         else:
             await ctx.send("ynwjdn")
+
+    @commands.command()
+    async def jinping(self, ctx):
+        chanle = self.client.get_channel(873407182564098048)
+        face = await chanle.fetch_message(875224307385643008)
+        await ctx.send(face.content)
+
+    @commands.command()
+    async def ihateamogubot(self, ctx):
+        await ctx.send("test")
+        chanle = self.client.get_channel(874999244073865268)
+        await ctx.send("bal")
+        try:
+            await ctx.send("piss")
+            msg = await chanle.fetch_message(875012839214043166)
+            await ctx.send("p")
+            await ctx.send(msg.content)
+        except Exception as ex:
+            await ctx.send(f"Error occured hhh ({type(ex).__name__}")
 
 def setup(client):
     client.add_cog(Moderating(client))

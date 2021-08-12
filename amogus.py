@@ -5,7 +5,9 @@ from personal.suspisus import atoken
 from discord.utils import find
 import os
 
-bot = commands.Bot(command_prefix="sus ",description="Amogus")
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix="sus ",description="Amogus", intents=intents)
 
 @bot.event
 async def on_ready():
@@ -17,6 +19,34 @@ async def on_guild_join(guild):
     if general and general.permissions_for(guild.me).send_messages:
         await general.send("amogus")
 # Fully from StackOverFlow hahahahahah
+
+# @bot.event
+# async def on_reaction_add(reaction, user):
+#    channel = reaction.message.channel
+#    await channel.send(f"{user.name} has added reaction {reaction.emoji} to the message: {reaction.message.content}")
+
+# This thing sorta works, but it cant watch messages that was sent before the bot started
+# so yeah help me
+#@bot.event
+# async def on_reaction_add(reaction, user):
+ #   channel = bot.get_channel(874949148896530432) # test ground 2
+  #  schannel = bot.get_channel(873407182564098048) # test gorund 1
+   # msg = await channel.fetch_message(874949198729060373)
+   # if reaction.message.content == "React to me s":
+    #    await schannel.send("amogus")
+    #else:
+     #   await schannel.send("totok")
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("That is not a command :rage:")
+
+@bot.command()
+async def getmsg(ctx):
+    channel = bot.get_channel(873407182564098048)
+    msg = await channel.fetch_message(874949198729060373)
+    await ctx.send(msg.content)
 
 @bot.command()
 async def picious(ctx):
