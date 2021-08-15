@@ -8,6 +8,40 @@ class Moderating(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    is_automod_on = False
+
+    @commands.Cog.listener() # NOTE: automod
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+
+        if message.channel.id != 810700979154452482:
+            return
+
+        if not is_automod_on:
+            return
+
+        for i in message.content.split():
+            if i == "test":
+                await message.delete()
+                await message.channel.send("no swer !!11!!1")
+                return
+
+    @commands.command() # NOTE: automod trigger
+    async def automod(self, ctx, foo = "0"):
+        global is_automod_on
+        is_automod_on = False
+        if foo == "0":
+            await ctx.send("Automod disabled")
+            return
+        elif foo == "1":
+            is_automod_on = True
+            await ctx.send("Automod enabled")
+        elif foo == "status":
+            await ctx.send(is_automod_on)
+        else:
+            await ctx.send("Automod disabled")
+
     @commands.command()
     async def test(self, ctx):
         await ctx.send(type(has_permissions))
@@ -52,13 +86,9 @@ class Moderating(commands.Cog):
 
     @commands.command()
     async def ihateamogubot(self, ctx):
-        await ctx.send("test")
         chanle = self.client.get_channel(874999244073865268)
-        await ctx.send("bal")
         try:
-            await ctx.send("piss")
             msg = await chanle.fetch_message(875012839214043166)
-            await ctx.send("p")
             await ctx.send(msg.content)
         except Exception as ex:
             await ctx.send(f"Error occured hhh ({type(ex).__name__}")
