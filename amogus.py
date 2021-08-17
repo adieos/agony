@@ -45,12 +45,6 @@ async def on_command_error(ctx, error):
         await ctx.send("That is not a command :rage:")
 
 @bot.command()
-async def getmsg(ctx):
-    channel = bot.get_channel(873407182564098048)
-    msg = await channel.fetch_message(874949198729060373)
-    await ctx.send(msg.content)
-
-@bot.command()
 async def picious(ctx):
     channel = bot.get_channel(873407182564098048) 
     await channel.send("🙏 :pray:")

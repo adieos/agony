@@ -6,11 +6,35 @@ class Harassment(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-   # @commands.Cog.listener()
-   # async def on_message(self, ctx):
-    #    if ctx.author.id == 515777528657608705:
-    #        await ctx.delete()
-    #        await ctx.channel.send("https://cdn.discordapp.com/emojis/865717171539542016.gif?v=1")
+    trollid = None
+
+    @commands.Cog.listener()
+    async def on_message(self, ctx):
+        if trollid is None:
+            return
+        elif ctx.author.id == trollid:
+            await ctx.delete()
+            await ctx.channel.send("https://cdn.discordapp.com/emojis/851662635379327006.gif?v=1")
+
+    @commands.command()
+    async def troll(self, ctx, user: discord.Member = None):
+        global trollid
+        if user is None:
+            await ctx.send("ok enough troling today :)")
+            trollid = None
+            return
+        trollid = user.id
+        await ctx.send(f"`trollid` has been set to {trollid}")
+
+    @commands.command()
+    async def whostroll(self, ctx):
+        try:
+            if trollid is None:
+                await ctx.send("Noone to troll!")
+                return
+            await ctx.send(trollid+" is being trolled !")
+        except NameError:
+            await ctx.send("Run `sus troll` command first!")
 
     @commands.command()
     async def dm(self, ctx, user: discord.User = None, *, msg):
@@ -42,7 +66,7 @@ class Harassment(commands.Cog):
         await ctx.send(f"{user}'s user ID is {user.id}")
 
     # This thing is stil flawed hhh (but still works!)
-    @commands.command()
+    @commands.command(aliases=["spamping"])
     async def sp(self, ctx, user: discord.User = None, amt=None):
         if user is None:
             await ctx.send("No user detected!")
@@ -118,12 +142,6 @@ class Harassment(commands.Cog):
                 else:
                     await ctx.author.remove_roles(crole)
                     await ctx.send(f"Removed color {i}.")
-    
-    @commands.command()
-    async def harassdoc(self,ctx):
-        user = await self.client.fetch_user(458553882029850645)
-        for i in range(5):
-            await user.send("Doc youstink")
 
 def setup(client):
     client.add_cog(Harassment(client))
