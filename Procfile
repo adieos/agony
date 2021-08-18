@@ -1,1 +1,1 @@
-worker python amogubot.py
+worker python amogus.py
