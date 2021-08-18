@@ -9,7 +9,7 @@ class EmoteLog(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_emojis_update(self, guild, before, after):
         channel = self.client.get_channel(873407182564098048)
-        await channel.send("Hey, an emote just got added !")
+        await channel.send("Hey, an emote just got added ! (or removed..)")
 
 
 def setup(client):
