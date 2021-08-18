@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded
-from suspisus import atoken 
+#from suspisus import atoken 
 from discord.utils import find
 import os
 
@@ -142,4 +142,4 @@ for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
          bot.load_extension(f"cogs.{filename[:-3]}")
 
-bot.run(atoken)
+bot.run("ODY4NDc1NTg5MDE3ODcwMzc2.YPwM6w.-t557x0TjyDEZllSPjiUIjTPa44")
