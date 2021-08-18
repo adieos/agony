@@ -1,4 +1,4 @@
-git+https://github.com/adieos/agony
+git+https://github.com/Rapptz/discord.py
 PyNaCl==1.4.0
 pandas
 dnspython==2.1.0
