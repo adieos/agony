@@ -10,6 +10,7 @@ class Harassment(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, ctx):
+        return
         if trollid is None:
             return
         elif ctx.author.id == trollid:
