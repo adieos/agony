@@ -1,1 +1,4 @@
 git+https://github.com/adieos/agony
+PyNaCl
+dnspython
+async-timeout
