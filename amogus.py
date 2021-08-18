@@ -12,8 +12,6 @@ bot = commands.Bot(command_prefix="sus ",description="Amogus", intents=intents)
 @bot.event
 async def on_ready():
     print(bot.user.name+" is online.")
-    channel = bot.get_channel(874999244073865268)
-    await channel.fetch_message(875237337108471880)
 
 @bot.event
 async def on_guild_join(guild):
