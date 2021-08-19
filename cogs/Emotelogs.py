@@ -62,6 +62,6 @@ class EmoteLog(commands.Cog):
         )
         await ctx.send(embed=ebd)
 
-
+#trole
 def setup(client):
     client.add_cog(EmoteLog(client))
