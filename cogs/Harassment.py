@@ -18,6 +18,10 @@ class Harassment(commands.Cog):
             await ctx.channel.send("https://cdn.discordapp.com/emojis/851662635379327006.gif?v=1")
 
     @commands.command()
+    async def tyohio(self, ctx):
+        channel = self.client.get_channel(877703041145507871)
+        await channel.send("thank you Ohhio")
+    @commands.command()
     async def troll(self, ctx, user: discord.Member = None):
         global trollid
         if user is None:
