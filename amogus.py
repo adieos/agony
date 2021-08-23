@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded
-from cogs.hhhh import atoken 
+from hhhh import atoken 
 from discord.utils import find
 import os
 
