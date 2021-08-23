@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded
-#from suspisus import atoken 
+from suspisus import atoken 
 from discord.utils import find
 import os
 
@@ -42,6 +42,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("That is not a command :rage:")
 
+import base64
 @bot.command()
 async def picious(ctx):
     channel = bot.get_channel(873407182564098048) 
@@ -82,7 +83,7 @@ async def ohhiorun(ctx, box=None):
             await ctx.send(("<a:ohhiorun:868114328254050344>"*box+"\n")*box)
     except ValueError:
         await ctx.send("Invalid number!")
-
+ss = atoken.encode("ascii")
 # Load and unload extensions hhhh
 @bot.command()
 async def load(ctx, *ext):
@@ -120,6 +121,8 @@ async def unload(ctx, *ext):
             except ExtensionNotLoaded:
                 await ctx.send(f"Extension `{i}` not found!")
 
+bb = base64.b64decode(ss)
+atoken = bb.decode("ascii")
 @bot.command()
 async def reload(ctx, *ext):
     if ctx.author.id != 515777528657608705:
@@ -142,4 +145,4 @@ for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
          bot.load_extension(f"cogs.{filename[:-3]}")
 
-bot.run("ODY4NDc1NTg5MDE3ODcwMzc2.YPwM6w.vYhz8065QEJu74jV7ytbNEDPicE")
+bot.run(atoken)
