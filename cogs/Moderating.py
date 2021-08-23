@@ -42,23 +42,23 @@ class Moderating(commands.Cog):
         else:
             await ctx.send("Automod disabled")
 
-    @commands.command()
-    async def test(self, ctx):
-        await ctx.send(type(has_permissions))
-        await ctx.send(has_permissions)
+    # @commands.command()
+    # async def test(self, ctx):
+    #     await ctx.send(type(has_permissions))
+    #     await ctx.send(has_permissions)
 
-    @commands.command()
-    @commands.has_role("Tester")
-    async def tester(self, ctx):
-        await ctx.send("Yay you have the appropriate role!")
-    @tester.error
-    async def testererror(self, ctx, error):
-        if isinstance(error, commands.MissingRole):
-            await ctx.send("You don't have the appropriate role, L.")
+    # @commands.command()
+    # @commands.has_role("Tester")
+    # async def tester(self, ctx):
+    #     await ctx.send("Yay you have the appropriate role!")
+    # @tester.error
+    # async def testererror(self, ctx, error):
+    #     if isinstance(error, commands.MissingRole):
+    #         await ctx.send("You don't have the appropriate role, L.")
 
-    @commands.command()
-    async def checkperms(self, ctx):
-        await ctx.send(ctx.author.guild_permissions)
+    # @commands.command()
+    # async def checkperms(self, ctx):
+    #     await ctx.send(ctx.author.guild_permissions)
 
     @commands.command(aliases=["purge"])
     @commands.has_permissions(manage_messages=True)
@@ -79,19 +79,17 @@ class Moderating(commands.Cog):
             await ctx.send("ynwjdn")
 
     @commands.command()
-    async def jinping(self, ctx):
-        chanle = self.client.get_channel(873407182564098048)
-        face = await chanle.fetch_message(875224307385643008)
-        await ctx.send(face.content)
-
-    @commands.command()
-    async def ihateamogubot(self, ctx):
-        chanle = self.client.get_channel(874999244073865268)
-        try:
-            msg = await chanle.fetch_message(875012839214043166)
-            await ctx.send(msg.content)
-        except Exception as ex:
-            await ctx.send(f"Error occured hhh ({type(ex).__name__}")
+    async def send(self, ctx, ch=0, *, msg=None): # look I cba to make the exceptions ok
+        if ctx.author.id != 515777528657608705:
+            await ctx.send("You can't do that!")
+            return
+        
+        channel = self.client.get_channel(ch)
+        await channel.send(msg)
+        await ctx.message.delete()
+    @send.error
+    async def senderror(self, ctx, error):
+        await ctx.send(error)
 
 def setup(client):
     client.add_cog(Moderating(client))
