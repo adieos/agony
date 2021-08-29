@@ -52,6 +52,7 @@ class Harassment(commands.Cog):
 
     # This thing is stil flawed hhh (but still works!)
     @commands.command(aliases=["spamping"])
+    @commands.cooldown(2, 30)
     async def sp(self, ctx, user: discord.User = None, amt=None):
         if user is None:
             await ctx.send("No user detected!")
@@ -76,6 +77,11 @@ class Harassment(commands.Cog):
                 await ctx.send("Input a valid number!")
             except:
                 await ctx.send("Invalid user!")
+    @sp.error
+    async def sperror(self, ctx, error):
+        if isinstance(error, commands.errors.CommandOnCooldown):
+            await ctx.send("Command is on cooldown!")
+        
 
 def setup(client):
     client.add_cog(Harassment(client))
