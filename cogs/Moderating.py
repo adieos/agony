@@ -1,7 +1,10 @@
 import discord
+import contextlib
+import io
 from discord import channel
 from discord.ext import commands
 from discord.ext.commands import has_permissions
+from discord.ext.commands.errors import MissingRequiredArgument, NotOwner
 
 class Moderating(commands.Cog):
 
@@ -89,6 +92,54 @@ class Moderating(commands.Cog):
         await ctx.message.delete()
     @send.error
     async def senderror(self, ctx, error):
+        await ctx.send(error)
+    
+    @commands.command()
+    @commands.is_owner()
+    async def toggle(self, ctx, *, command):
+        cmd = self.client.get_command(command)
+
+        if cmd is None:
+            await ctx.send("I can't find such command!")
+            return
+        elif cmd == ctx.command:
+            await ctx.send("You can't disable this command!")
+            return
+
+        cmd.enabled = not cmd.enabled # toggling the command
+        ternary = "enabled" if cmd.enabled else "disabled"
+        await ctx.send(f"{ternary} {cmd.qualified_name}")
+    @toggle.error
+    async def toggleerror(self, ctx, error):
+        if isinstance(error, MissingRequiredArgument):
+            await ctx.send("I need the command name to enable/disable!")
+            return
+        elif isinstance(error, NotOwner):
+            await ctx.send("You can't run this command!")
+            return
+        await ctx.send(f"`{type(error).__name__}: {error}`")
+
+    @commands.command(aliases=["e", "eval"])
+    @commands.is_owner()
+    async def evaluate(self, ctx, *, code):
+        str_obj = io.StringIO() #Retrieves a stream of data
+        if code[0] == "`":
+            code = code[9:-4]
+        try:
+            with contextlib.redirect_stdout(str_obj):
+                exec(code)
+        except Exception as e:
+            await ctx.send("oh no")
+            return await ctx.send(f"```{e.__class__.__name__}: {e}```")
+        if str_obj.getvalue() == "":
+            await ctx.send("No output")
+            return
+        await ctx.send(f'```{str_obj.getvalue()}```')
+    @evaluate.error
+    async def asssss(self, ctx, error):
+        if isinstance(error, NotOwner):
+            await ctx.send("Hey, you can't run this command!")
+            return
         await ctx.send(error)
 
 def setup(client):

@@ -54,35 +54,22 @@ async def ping(ctx):
 
 @bot.command()
 async def invite(ctx):
-    ebd = discord.Embed(
-        title = "Invite Bot",
-        description = "You think this bot is actually useful\nand not a completely "\
-            "futile artificial intelligence, huh?\nGo ahead, add this junk to your server."
-    )
-    ebd.set_thumbnail(
-        url = "https://cdn.discordapp.com/attachments/873407182564098048/874500884351037500/amogus.jpg"
-    )
-    ebd.add_field(
-        name = "Click This!",
-        value = "[Add AmoguBot to your server](https://discord.com/api/oauth2/authorize?client_id=868475589017870376&permissions=287808&scope=bot)"
-    )
-    await ctx.send(embed=ebd)
-# Misc
-@bot.command()
-async def ohhiorun(ctx, box=None):
-    try:
-        if box is None:
-            box = 1
+    await ctx.send("This bot is no longer invitable :((((")
+
+@commands.command()
+async def emote(ctx, emote):
+    for i in ctx.guild.emojis:
+        if i.name == emote:
+            gemote = ctx.guild.emojis.index(i) # guild emote
+            await ctx.send("emote found!")
+            await ctx.send(ctx.guild.emojis[gemote])
+            return
         else:
-            box = int(box)
-        if box <= 0:
-            await ctx.send("No ohhiorun :(")
-        elif box >= 6:
-            await ctx.send("Too many ohhioruns!")
-        else:
-            await ctx.send(("<a:ohhiorun:868114328254050344>"*box+"\n")*box)
-    except ValueError:
-        await ctx.send("Invalid number!")
+            pass
+    await ctx.send("emote not found:(")
+@emote.error
+async def emoteerror(ctx, error):
+    await ctx.send(f"`{type(error).__name__}: {error}`")
 ss = atoken.encode("ascii")
 # Load and unload extensions hhhh
 @bot.command()

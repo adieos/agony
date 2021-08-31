@@ -1,4 +1,5 @@
 import discord
+from discord.errors import Forbidden, HTTPException
 from discord.ext import commands
 from time import sleep
 
@@ -26,6 +27,9 @@ class Harassment(commands.Cog):
         if isinstance(error, commands.UserNotFound):
             await ctx.send("Please input a valid user!")
             return
+        elif isinstance(error, Forbidden) or isinstance(error, HTTPException):
+            await ctx.send("Unable to send a direct message to this user.")
+            return
         else: # Hopefully this doesnt run
             await ctx.send(f"An unknown error has occured. (`{error}`)")
             await ctx.send("<@515777528657608705> BOR an unknown error !") 
@@ -51,9 +55,9 @@ class Harassment(commands.Cog):
         await ctx.send(f"{user}'s user ID is {user.id}")
 
     # This thing is stil flawed hhh (but still works!)
-    @commands.command(aliases=["spamping"])
+    @commands.command(aliases=["sp"])
     @commands.cooldown(2, 30)
-    async def sp(self, ctx, user: discord.User = None, amt=None):
+    async def spamping(self, ctx, user: discord.User = None, amt=None, *, msg=None):
         if user is None:
             await ctx.send("No user detected!")
         elif amt is None:
@@ -71,16 +75,23 @@ class Harassment(commands.Cog):
                     await ctx.send("Yea ok not pinging anyone got it")
                     return
                 for i in range(amt):
-                    await ctx.send(user.mention)
-                    sleep(0.25)
+                    if msg is None:
+                        await ctx.send(user.mention)
+                        sleep(0.25)
+                    else:
+                        await ctx.send(f"{user.mention} {msg}")
+                        sleep(0.25)
             except ValueError:
                 await ctx.send("Input a valid number!")
             except:
                 await ctx.send("Invalid user!")
-    @sp.error
+    @spamping.error
     async def sperror(self, ctx, error):
         if isinstance(error, commands.errors.CommandOnCooldown):
             await ctx.send("Command is on cooldown!")
+        else:
+            await ctx.send(f"Unknown error occured.")
+
         
 
 def setup(client):
