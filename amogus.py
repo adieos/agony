@@ -41,6 +41,10 @@ async def on_guild_join(guild):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("That is not a command :rage:")
+    elif isinstance(error, commands.DisabledCommand):
+        await ctx.send("That command is currently disabled!")
+    else:
+        await ctx.send(f"`{error}`")
 
 import base64
 @bot.command()

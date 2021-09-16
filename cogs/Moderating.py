@@ -4,7 +4,7 @@ import io
 from discord import channel
 from discord.ext import commands
 from discord.ext.commands import has_permissions
-from discord.ext.commands.errors import MissingRequiredArgument, NotOwner
+from discord.ext.commands.errors import DisabledCommand, MissingRequiredArgument, NotOwner
 
 class Moderating(commands.Cog):
 
@@ -64,7 +64,7 @@ class Moderating(commands.Cog):
     #     await ctx.send(ctx.author.guild_permissions)
 
     @commands.command(aliases=["purge"])
-    @commands.has_permissions(manage_messages=True)
+    @commands.is_owner()
     async def clear(self, ctx, amt=None):
         try:
             if amt == None:
@@ -76,10 +76,8 @@ class Moderating(commands.Cog):
             await ctx.send("Something hsa gone wrong hhh")
     @clear.error
     async def purgeerror(self, ctx, error):
-        if isinstance(error, commands.MissingPermissions):
+        if isinstance(error, commands.NotOwner):
             await ctx.send("You cant do that!")
-        else:
-            await ctx.send("ynwjdn")
 
     @commands.command()
     async def send(self, ctx, ch=0, *, msg=None): # look I cba to make the exceptions ok
