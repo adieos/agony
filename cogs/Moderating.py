@@ -1,49 +1,34 @@
 import discord
 import contextlib
 import io
-from discord import channel
+from datetime import datetime
+from discord.errors import HTTPException
 from discord.ext import commands
 from discord.ext.commands import has_permissions
-from discord.ext.commands.errors import DisabledCommand, MissingRequiredArgument, NotOwner
+from discord.ext.commands.errors import MissingRequiredArgument, NotOwner
 
 class Moderating(commands.Cog):
 
     def __init__(self, client):
         self.client = client
 
-    is_automod_on = False
-
-    @commands.Cog.listener() # NOTE: automod
-    async def on_message(self, message):
-        if message.author.bot:
-            return
-
-        if message.channel.id != 810700979154452482:
-            return
-
-        if not is_automod_on:
-            return
-
-        for i in message.content.split():
-            if i == "test":
-                await message.delete()
-                await message.channel.send("no swer !!11!!1")
-                return
-
-    @commands.command() # NOTE: automod trigger
-    async def automod(self, ctx, foo = "0"):
-        global is_automod_on
-        is_automod_on = False
-        if foo == "0":
-            await ctx.send("Automod disabled")
-            return
-        elif foo == "1":
-            is_automod_on = True
-            await ctx.send("Automod enabled")
-        elif foo == "status":
-            await ctx.send(is_automod_on)
-        else:
-            await ctx.send("Automod disabled")
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        channel = self.client.get_channel(889486525874720768)
+        msg = message.content[:1024] # shortens the message
+        amt = "Massive Message Deleted" if len(message.content) > 1024 else "Message Deleted" # just fancy fancy shit o man
+        color = 0xfca103 if len(message.content) < 1025 else 0xdb1009
+        ebd = discord.Embed(title=amt, color=color)
+        ebd.add_field(name="Author", value=message.author)
+        ebd.add_field(name="Location", value=message.channel)
+        ebd.add_field(name="Message", value=msg, inline=False)
+        ebd.timestamp=datetime.utcnow()
+        try:
+            await channel.send(embed=ebd)
+        except HTTPException:
+             await channel.send(f"An embed just got deleted at {datetime.utcnow()}")
+        except Exception as e:
+            await channel.send(f"`{type(e).__name__}: {e}`")
 
     # @commands.command()
     # async def test(self, ctx):

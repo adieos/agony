@@ -3,6 +3,8 @@ from discord.errors import Forbidden, HTTPException
 from discord.ext import commands
 from time import sleep
 
+from discord.ext.commands.errors import DisabledCommand
+
 class Harassment(commands.Cog):
 
     def __init__(self, client):
@@ -30,9 +32,6 @@ class Harassment(commands.Cog):
         elif isinstance(error, Forbidden) or isinstance(error, HTTPException):
             await ctx.send("Unable to send a direct message to this user.")
             return
-        else: # Hopefully this doesnt run
-            await ctx.send(f"An unknown error has occured. (`{error}`)")
-            await ctx.send("<@515777528657608705> BOR an unknown error !") 
         
     @commands.command(aliases=["id"])
     async def grabid(self, ctx, user: discord.User = None):
@@ -88,9 +87,8 @@ class Harassment(commands.Cog):
     @spamping.error
     async def sperror(self, ctx, error):
         if isinstance(error, commands.errors.CommandOnCooldown):
-            await ctx.send("Command is on cooldown!")
-        else:
-            await ctx.send(f"Unknown error occured.")
+            await ctx.send(f"{ctx.author.mention}, you are on cooldown!")
+            return
 
         
 
