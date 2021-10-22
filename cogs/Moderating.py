@@ -125,5 +125,17 @@ class Moderating(commands.Cog):
             return
         await ctx.send(error)
 
+    @commands.command()
+    async def presence(self, ctx, type, *, arg):
+        if type == "game":
+            act = discord.Game(name=arg)
+        elif type == "stream":
+            act = discord.Streaming(name=arg) # NEED URL
+        elif type == "listen":
+            act = discord.Activity(type=discord.ActivityType.listening, name=arg)
+        elif type == "watch":
+            act = discord.Activity(type=discord.ActivityType.watching, name=arg)
+        await self.client.change_presence(activity=act)
+
 def setup(client):
     client.add_cog(Moderating(client))

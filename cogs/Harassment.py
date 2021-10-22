@@ -2,6 +2,7 @@ import discord
 from discord.errors import Forbidden, HTTPException
 from discord.ext import commands
 from time import sleep
+import random
 
 from discord.ext.commands.errors import DisabledCommand
 
@@ -89,6 +90,36 @@ class Harassment(commands.Cog):
         if isinstance(error, commands.errors.CommandOnCooldown):
             await ctx.send(f"{ctx.author.mention}, you are on cooldown!")
             return
+
+    @commands.command(aliases=["social", "sc"])
+    async def socialcredit(self, ctx, amt: int, user: discord.User):
+        try:
+            if amt < 0 : #negative social credit boo
+                amt *= -1
+                amt = str(amt)
+                msglist = ["Keep this up and you will be sent to re-education camp!", "Supreme Leader is disappointed with you.",
+                "Do better next time.", "Should you lose more social credits, you will be sent to re-education camp."]
+                msg = random.choice(msglist)
+                finalmsg = amt + " social credits have been deducted from your account. " + msg
+
+            elif amt > 0: #positive social credit yay
+                amt = str(amt)
+                msglist = ["Enjoy!", "Glory to CCP!", "Have fun!", "Xi Jinping is satisfied with you."]
+                msg = random.choice(msglist)
+                finalmsg = amt + " social credis have been added to your account. " + msg
+
+            else:
+                return
+
+        except TypeError:
+            await ctx.send("Social credit amount is invalid!")
+            return
+
+        await user.send(finalmsg)
+        await ctx.send(f"Social credit manipulation on {user} success.")
+    @socialcredit.error
+    async def socialcrediterror(self, ctx, error):
+        await ctx.send(error)
 
         
 
