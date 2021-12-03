@@ -11,6 +11,8 @@ bot = commands.Bot(command_prefix="sus ",description="Amogus", intents=intents)
 
 @bot.event
 async def on_ready():
+    channel = bot.get_channel(810700979154452482) # general
+    await channel.send("I am alive :grin:")
     print(bot.user.name+" is online.")
 
 @bot.event
