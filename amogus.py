@@ -45,8 +45,6 @@ async def on_command_error(ctx, error):
         await ctx.send("That is not a command :rage:")
     elif isinstance(error, commands.DisabledCommand):
         await ctx.send("That command is currently disabled!")
-    else:
-        await ctx.send(f"`{error}`")
 
 import base64
 @bot.command()

@@ -3,6 +3,7 @@ from discord.errors import Forbidden, HTTPException
 from discord.ext import commands
 from time import sleep
 import random
+import json
 
 from discord.ext.commands.errors import DisabledCommand
 
@@ -92,33 +93,58 @@ class Harassment(commands.Cog):
             return
 
     @commands.command(aliases=["social", "sc"])
-    async def socialcredit(self, ctx, amt: int, user: discord.User):
-        try:
+    async def socialcredit(self, ctx, user: discord.User, amt: int):
+        with open('socialcredit.json', 'r') as sc:
+            data = json.load(sc)
+            # IF statement below is only used to generate final message
             if amt < 0 : #negative social credit boo
-                amt *= -1
-                amt = str(amt)
+                amtabs = -1 * amt # amtabs = amt Absolute
+                amts = str(amtabs) # amts = amount String
                 msglist = ["Keep this up and you will be sent to re-education camp!", "Supreme Leader is disappointed with you.",
                 "Do better next time.", "Should you lose more social credits, you will be sent to re-education camp."]
                 msg = random.choice(msglist)
-                finalmsg = amt + " social credits have been deducted from your account. " + msg
+                finalmsg = amts + " social credits have been deducted from your account. " + msg
 
             elif amt > 0: #positive social credit yay
-                amt = str(amt)
+                amts = str(amt)
                 msglist = ["Enjoy!", "Glory to CCP!", "Have fun!", "Xi Jinping is satisfied with you."]
                 msg = random.choice(msglist)
-                finalmsg = amt + " social credis have been added to your account. " + msg
+                finalmsg = amts + " social credis have been added to your account. " + msg
 
             else:
                 return
 
-        except TypeError:
-            await ctx.send("Social credit amount is invalid!")
-            return
+            # JSON data manipulating
+            for i in data['members']:
+                if i['id']==user.id:
+                    i['credit']+=amt
 
-        await user.send(finalmsg)
-        await ctx.send(f"Social credit manipulation on {user} success.")
+        with open('socialcredit.json', 'w') as newsc:
+            json.dump(data, newsc, indent = 2)
+
+        if ctx.author.id == 515777528657608705:
+            for i in data['members']:
+                print("-------------------------------------")
+                print(i)
+
+            await user.send(finalmsg)
+            await ctx.send(f"Social credit manipulation on {user} success.")
     @socialcredit.error
     async def socialcrediterror(self, ctx, error):
+        await ctx.send(error)
+
+    @commands.command()
+    async def displaycredit(self, ctx, user:discord.User=None):
+        if user is None:
+            user = ctx.author
+
+        with open('socialcredit.json', 'r') as scj:
+            data = json.load(scj)
+            for i in data['members']:
+                if i['id']==user.id:
+                    await ctx.send(f"User {user} has {i['credit']} Social Credits in their account.")
+    @displaycredit.error
+    async def displaycrediterror(self, ctx, error):
         await ctx.send(error)
 
         
