@@ -109,7 +109,7 @@ class Harassment(commands.Cog):
                 amts = str(amt)
                 msglist = ["Enjoy!", "Glory to CCP!", "Have fun!", "Xi Jinping is satisfied with you."]
                 msg = random.choice(msglist)
-                finalmsg = amts + " social credis have been added to your account. " + msg
+                finalmsg = amts + " social credits have been added to your account. " + msg
 
             else:
                 return
@@ -154,7 +154,7 @@ class Harassment(commands.Cog):
         with open('socialcredit.json', 'w') as scj:
             json.dump(data, scj, indent = 2)
         
-        await ctx.send(f"d {user}")
+        await ctx.send(f":exploding_head: | Success! Reduced {user}'s Social Credits to ashes. They now have 0 Social Credits remaining.")
 
     @nukecredit.error
     async def nukecrediterror(self, ctx, error):
