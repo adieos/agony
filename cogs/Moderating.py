@@ -1,10 +1,11 @@
 import discord
 import contextlib
 import io
+import json
 from datetime import datetime
 from discord.errors import HTTPException
 from discord.ext import commands
-from discord.ext.commands import has_permissions
+
 from discord.ext.commands.errors import MissingRequiredArgument, NotOwner
 
 class Moderating(commands.Cog):
@@ -29,6 +30,29 @@ class Moderating(commands.Cog):
              await channel.send(f"An embed just got deleted at {datetime.utcnow()}")
         except Exception as e:
             await channel.send(f"`{type(e).__name__}: {e}`")
+
+    @commands.Cog.listener()
+    async def on_message(self, msg):
+        if msg.author==self.client.user:
+            return
+
+        with open('socialcredit.json', 'r') as scj:
+            data = json.load(scj)
+            words = msg.content.split()
+            longfunnywarn = '''
+            500 social credits have been deducted from your account. 500 社會信用已從您的帳戶中扣除。Reason: saying the T#iwan word. 原因：說出T#iwan這個詞。DO NOT DO THIS AGAIN! 不要再這樣做了！Should you keep doing this again, you will be sent to re-education camp. 如果你繼續這樣做，你將被送到再教育營。
+            '''
+            for i in words:            
+                if i.lower() == "taiwan":
+                    for j in data['members']:
+                        if j['id'] == msg.author.id:
+                            j['credit'] -= 500
+                            await msg.channel.send(longfunnywarn)
+                            break
+                    break
+
+        with open('socialcredit.json', 'w') as scj:
+            json.dump(data, scj, indent = 2)
 
     # @commands.command()
     # async def test(self, ctx):

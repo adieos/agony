@@ -5,7 +5,7 @@ from time import sleep
 import random
 import json
 
-from discord.ext.commands.errors import DisabledCommand
+from discord.ext.commands.errors import DisabledCommand, MissingRequiredArgument
 
 class Harassment(commands.Cog):
 
@@ -122,13 +122,8 @@ class Harassment(commands.Cog):
         with open('socialcredit.json', 'w') as newsc:
             json.dump(data, newsc, indent = 2)
 
-        if ctx.author.id == 515777528657608705:
-            for i in data['members']:
-                print("-------------------------------------")
-                print(i)
-
-            await user.send(finalmsg)
-            await ctx.send(f"Social credit manipulation on {user} success.")
+        await user.send(finalmsg)
+        await ctx.send(f"Social credit manipulation on {user} success.")
     @socialcredit.error
     async def socialcrediterror(self, ctx, error):
         await ctx.send(error)
@@ -146,6 +141,25 @@ class Harassment(commands.Cog):
     @displaycredit.error
     async def displaycrediterror(self, ctx, error):
         await ctx.send(error)
+
+    @commands.command()
+    async def nukecredit(self, ctx, user:discord.User):
+        with open('socialcredit.json','r') as scj:
+            data = json.load(scj)
+
+            for i in data['members']:
+                if i['id'] == user.id:
+                    i['credit'] = 0
+                    
+        with open('socialcredit.json', 'w') as scj:
+            json.dump(data, scj, indent = 2)
+        
+        await ctx.send(f"d {user}")
+
+    @nukecredit.error
+    async def nukecrediterror(self, ctx, error):
+        if isinstance(error, MissingRequiredArgument):
+            await ctx.send("kock")
 
         
 
