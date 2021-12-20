@@ -3,7 +3,7 @@
     {
       "name": "adios",
       "id": 515777528657608705,
-      "credit": -700
+      "credit": 0
     },
     {
       "name": "h2",
@@ -68,6 +68,21 @@
     {
       "name": "wiki",
       "id": 430596752962486273,
+      "credit": 0
+    },
+    {
+      "name": "ciara",
+      "id": 647100327048511519,
+      "credit": 0
+    },
+    {
+      "name": "spagetheee",
+      "id": 478263128011046953,
+      "credit": 0
+    },
+    {
+      "name": "casse-kontolle",
+      "id": 917938082567819295,
       "credit": 0
     }
   ]
