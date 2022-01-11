@@ -1,9 +1,55 @@
 import discord
 from discord.ext import commands
+import CommandDesc
 from discord.ext.commands.errors import ExtensionAlreadyLoaded, ExtensionNotFound, ExtensionNotLoaded
 from hhhh import atoken 
 from discord.utils import find
 import os
+
+# Help section
+class CustomHelpCMD(commands.HelpCommand):
+    def __init__(self):
+        super().__init__()
+
+    async def send_bot_help(self, mapping):
+        try:
+            ebd = discord.Embed(
+                title = "Help Command",
+                description = f'`List of command in this server.`',
+                color = 0xdaa717
+            )
+            for cog in mapping:
+                cmds = ""
+                for cmd in mapping[cog]:
+                    cmds += f"`{cmd.name}`, "
+                ebd.add_field(
+                    name = cog.qualified_name if cog is not None else "Base",
+                    value = cmds,
+                    inline = False
+                )
+                
+            
+            await self.get_destination().send(embed=ebd)
+        except Exception as e:
+            await self.get_destination().send(e)
+
+    async def send_command_help(self, command):
+        ebd = discord.Embed(
+            title = f"{command.name.capitalize()} Command",
+            description = command.brief,
+            color = 0xdaa717
+        )
+        ebd.add_field(
+            name = "\u200b \n Usage",
+            value = command.description,
+            inline = False
+        )
+        ebd.add_field(
+            name = "\u200b \n Information",
+            value = command.help,
+            inline = False
+        )
+        await self.get_destination().send(embed=ebd)
 
 intents = discord.Intents.default()
 intents.members = True
@@ -11,6 +57,7 @@ bot = commands.Bot(command_prefix="sus ",description="Amogus", intents=intents)
 
 @bot.event
 async def on_ready():
+    await bot.change_presence(activity=discord.Game(name = "Social Credit Simulator 1989"))
     channel = bot.get_channel(810700979154452482) # general
     await channel.send("I am alive :grin:")
     print(bot.user.name+" is online.")
@@ -20,24 +67,6 @@ async def on_guild_join(guild):
     general = find(lambda x: x.name == 'general',  guild.text_channels)
     if general and general.permissions_for(guild.me).send_messages:
         await general.send("amogus")
-# Fully from StackOverFlow hahahahahah
-
-# @bot.event
-# async def on_reaction_add(reaction, user):
-#    channel = reaction.message.channel
-#    await channel.send(f"{user.name} has added reaction {reaction.emoji} to the message: {reaction.message.content}")
-
-# This thing sorta works, but it cant watch messages that was sent before the bot started
-# so yeah help me
-#@bot.event
-# async def on_reaction_add(reaction, user):
- #   channel = bot.get_channel(874949148896530432) # test ground 2
-  #  schannel = bot.get_channel(873407182564098048) # test gorund 1
-   # msg = await channel.fetch_message(874949198729060373)
-   # if reaction.message.content == "React to me s":
-    #    await schannel.send("amogus")
-    #else:
-     #   await schannel.send("totok")
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -47,10 +76,6 @@ async def on_command_error(ctx, error):
         await ctx.send("That command is currently disabled!")
 
 import base64
-@bot.command()
-async def picious(ctx):
-    channel = bot.get_channel(873407182564098048) 
-    await channel.send("🙏 :pray:")
 
 @bot.command()
 async def ping(ctx):
@@ -60,20 +85,20 @@ async def ping(ctx):
 async def invite(ctx):
     await ctx.send("This bot is no longer invitable :((((")
 
-@commands.command()
-async def emote(ctx, emote):
-    for i in ctx.guild.emojis:
-        if i.name == emote:
-            gemote = ctx.guild.emojis.index(i) # guild emote
-            await ctx.send("emote found!")
-            await ctx.send(ctx.guild.emojis[gemote])
-            return
-        else:
-            pass
-    await ctx.send("emote not found:(")
-@emote.error
-async def emoteerror(ctx, error):
-    await ctx.send(f"`{type(error).__name__}: {error}`")
+# @commands.command()
+# async def emote(ctx, emote):
+#     for i in ctx.guild.emojis:
+#         if i.name == emote:
+#             gemote = ctx.guild.emojis.index(i) # guild emote
+#             await ctx.send("emote found!")
+#             await ctx.send(ctx.guild.emojis[gemote])
+#             return
+#         else:
+#             pass
+#     await ctx.send("emote not found:(")
+# @emote.error
+# async def emoteerror(ctx, error):
+#     await ctx.send(f"`{type(error).__name__}: {error}`")
 ss = atoken.encode("ascii")
 # Load and unload extensions hhhh
 @bot.command()
@@ -94,12 +119,13 @@ async def load(ctx, *ext):
                 await ctx.send(f"Extension `{i}` not found!")
             except ExtensionAlreadyLoaded:
                 await ctx.send(f"Extension `{i}` is already loaded!")
+@load.error
+async def loaderror(ctx, error):
+    if isinstance(error, commands.NotOwner):
+        await ctx.send("Hey, you can't do that!")
 
 @bot.command()
 async def unload(ctx, *ext):
-    if ctx.author.id != 515777528657608705:
-        await ctx.send("You are not allowed to do that!")
-        return
     if len(ext) == 0:
         await ctx.send("No extension unloaded!")
     else:
@@ -111,14 +137,15 @@ async def unload(ctx, *ext):
                 await ctx.send(f"Extension `{i}` has been unloaded.")
             except ExtensionNotLoaded:
                 await ctx.send(f"Extension `{i}` not found!")
+@unload.error
+async def unloaderror(ctx, error):
+    if isinstance(error, commands.NotOwner):
+        await ctx.send("Hey, you can't do that!")
 
 bb = base64.b64decode(ss)
 atoken = bb.decode("ascii")
 @bot.command()
 async def reload(ctx, *ext):
-    if ctx.author.id != 515777528657608705:
-        await ctx.send("You are not allowed to do that!")
-        return
     if len(ext) == 0:
         await ctx.send("No extension reloaded!")
     else:
@@ -131,6 +158,10 @@ async def reload(ctx, *ext):
                 await ctx.send(f"Extension {i} has been reloaded.")
             except ExtensionNotLoaded:
                 await ctx.send(f"Extension `{i}` not found!")
+@reload.error
+async def reloaderror(ctx, error):
+    if isinstance(error, commands.NotOwner):
+        await ctx.send("Hey, you can't do that!")
 
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):

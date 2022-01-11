@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 from discord.errors import HTTPException
 from discord.ext import commands
+import asyncio
 
 from discord.ext.commands.errors import MissingRequiredArgument, NotOwner
 
@@ -160,6 +161,48 @@ class Moderating(commands.Cog):
         elif type == "watch":
             act = discord.Activity(type=discord.ActivityType.watching, name=arg)
         await self.client.change_presence(activity=act)
+
+# MUTE COMMAND
+    @commands.command()
+    @commands.is_owner()
+    async def shutup(self, ctx, user:discord.Member, dura="1m"):
+        # checking if the muted role exist or not (named "please shut up thanks")
+        if discord.utils.get(ctx.guild.roles, name="please shut up thanks"):
+            pass
+        else:
+            await ctx.guild.create_role(name="please shut up thanks", permissions=discord.Permissions(permissions=0), color=0x808080)
+            role = discord.utils.get(ctx.guild.roles, name="please shut up thanks")
+            for channel in ctx.guild.text_channels:
+                perms = channel.overwrites_for(role)
+                perms.send_messages=False
+                await channel.set_permissions(role, overwrite=perms, reason="em my beloved <3")
+        
+        # convert the duration to seconds
+        dura = dura.lower()
+        conversion = {"s":1, "m":60, "h":3600,"d":86400}
+        try:
+            duration = int(dura)
+        except ValueError:
+            duration = int(dura[:-1]) * conversion[dura[-1]]
+
+        # creating simple embed
+        ebd = discord.Embed(
+            title = f":white_check_mark: | {user} will no longer speak for the next {duration} seconds :grin:",
+            color = 0xdaa717
+        )
+
+        # muting the user
+        mutedrole = discord.utils.get(ctx.guild.roles, name="please shut up thanks")    
+        await user.add_roles(mutedrole)
+        await ctx.send(embed=ebd)
+        await asyncio.sleep(duration)
+        await user.remove_roles(mutedrole)
+    @shutup.error
+    async def shutuperror(self, ctx, error):
+        if isinstance(error, NotOwner):
+            await ctx.send("haha, no dont do that")
+        else:
+            await ctx.send(error)
 
 def setup(client):
     client.add_cog(Moderating(client))
