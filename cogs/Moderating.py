@@ -14,23 +14,23 @@ class Moderating(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.Cog.listener()
-    async def on_message_delete(self, message):
-        channel = self.client.get_channel(889486525874720768)
-        msg = message.content[:1024] # shortens the message
-        amt = "Massive Message Deleted" if len(message.content) > 1024 else "Message Deleted" # just fancy fancy shit o man
-        color = 0xfca103 if len(message.content) < 1025 else 0xdb1009
-        ebd = discord.Embed(title=amt, color=color)
-        ebd.add_field(name="Author", value=message.author)
-        ebd.add_field(name="Location", value=message.channel)
-        ebd.add_field(name="Message", value=msg, inline=False)
-        ebd.timestamp=datetime.utcnow()
-        try:
-            await channel.send(embed=ebd)
-        except HTTPException:
-             await channel.send(f"An embed just got deleted at {datetime.utcnow()}")
-        except Exception as e:
-            await channel.send(f"`{type(e).__name__}: {e}`")
+    # @commands.Cog.listener()
+    # async def on_message_delete(self, message):
+    #     channel = self.client.get_channel(889486525874720768)
+    #     msg = message.content[:1024] # shortens the message
+    #     amt = "Massive Message Deleted" if len(message.content) > 1024 else "Message Deleted" # just fancy fancy shit o man
+    #     color = 0xfca103 if len(message.content) < 1025 else 0xdb1009
+    #     ebd = discord.Embed(title=amt, color=color)
+    #     ebd.add_field(name="Author", value=message.author)
+    #     ebd.add_field(name="Location", value=message.channel)
+    #     ebd.add_field(name="Message", value=msg, inline=False)
+    #     ebd.timestamp=datetime.utcnow()
+    #     try:
+    #         await channel.send(embed=ebd)
+    #     except HTTPException:
+    #          await channel.send(f"An embed just got deleted at {datetime.utcnow()}")
+    #     except Exception as e:
+    #         await channel.send(f"`{type(e).__name__}: {e}`")
 
     @commands.Cog.listener()
     async def on_message(self, msg):

@@ -58,8 +58,6 @@ bot = commands.Bot(command_prefix="sus ",description="Amogus", intents=intents)
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name = "Social Credit Simulator 1989"))
-    channel = bot.get_channel(810700979154452482) # general
-    await channel.send("I am alive :grin:")
     print(bot.user.name+" is online.")
 
 @bot.event
